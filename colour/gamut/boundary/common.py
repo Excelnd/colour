@@ -219,16 +219,20 @@ if __name__ == '__main__':
     # source /Users/kelsolaar/Library/Caches/pypoetry/virtualenvs/colour-AKjB3F3b-py3.7/bin/activate
     # python /Users/kelsolaar/Documents/Development/colour-science/colour/colour/gamut/boundary/common.py
 
+    import matplotlib.pyplot as plt
     import sys
     import trimesh
     import trimesh.smoothing
     import plotly.graph_objects as go
+    from matplotlib.collections import LineCollection
 
     import colour
     import colour.plotting
-    from colour.plotting import render
+    from colour.plotting import artist, render
     from colour.gamut import gamut_boundary_descriptor_Morovic2000
-    from colour.algebra import cartesian_to_spherical
+    from colour.algebra import cartesian_to_spherical, polar_to_cartesian
+    from colour.plotting import COLOUR_STYLE_CONSTANTS
+    from colour.utilities import as_float_array
 
     np.set_printoptions(
         formatter={'float': '{:0.3f}'.format},
@@ -547,8 +551,8 @@ if __name__ == '__main__':
 
     # v_r = 8
     # h_r = 8
-    v_r = 32
-    h_r = 32
+    v_r = 16
+    h_r = 16
     # v_r = 18
     # h_r = 16
     segments = [
@@ -581,13 +585,12 @@ if __name__ == '__main__':
     #         GBD_m_s[0],
     #         tstack([x_s_g, y_s_g])))
 
-    colour.plotting.plot_gamut_boundary_descriptors_hue_segments(
-        GBD_m_s,
-        hue_angles=[5, 10, 45, 180, 270],
-        # columns=8,
-        transparent_background=False)
+    # colour.plotting.plot_segment_maxima_gamut_boundary_segments(
+    #     GBD_m_s,
+    #     columns=8,
+    #     # angles=[5, 10, 45, 180, 270],
+    #     transparent_background=False)
 
-    raise
     # GBD_m_s_z = np.copy(GBD_m_s[0])
     # ranges = [[-50, 50], [0, np.pi], [-np.pi, np.pi]]
     # for i in range(3):
@@ -595,6 +598,12 @@ if __name__ == '__main__':
     #         GBD_m_s_z[..., i], (ranges[i][0], ranges[i][1]), (0, 1))
     #
     # colour.plotting.plot_image(GBD_m_s_z)
+
+    # colour.plotting.plot_segment_maxima_gamut_boundary(GBD_m_s[0], Jab_s=Jab)
+    # colour.plotting.plot_segment_maxima_gamut_boundary(GBD_m_s[0])
+    RGB = np.random.random((128, 128, 3))
+    colour.plotting.plot_Jab_colours_in_segment_maxima_gamut_boundary(
+        Jab, 'Jb', show_debug_circles=False)
 
     GBD_t_s = [
         tessellate_gamut_boundary_descriptor(GBD_m) for GBD_m in GBD_m_s
